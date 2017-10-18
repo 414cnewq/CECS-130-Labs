@@ -16,7 +16,7 @@ j=tmp;
 /*
 Christopher Newquist
 CECS 130-01
-October 3, 2017
+October 17, 2017
 
 Lab 8: phone book
 */
@@ -62,6 +62,11 @@ void printData(Contact* list)
 	printf("%s %s %s\n", list->first, list->last, list->phone_no);
 }
 
+void fprintData(FILE* f, Contact* list)
+{
+	fprintf(f,"%s %s %s\n", list->first, list->last, list->phone_no);
+}
+
 Contact* createContact(char* m_phone, char* fname, char* lname)
 {
 	Contact* ret = (Contact*)calloc(1,sizeof(Contact));
@@ -78,16 +83,16 @@ Contact* createContact(char* m_phone, char* fname, char* lname)
 
 int main(){
 	int input =5, tm=0, ndeleted=0;
-	char phone[16]; char fname[16]; char lname[16];
+	char phone[16]; char fname[16]; char lname[16]; char filename[32];
 	time_t t;
 	srand((unsigned)time(&t));
-	Contact** mainList = calloc(1, sizeof(Contact));
+	Contact** mainList = calloc(2, sizeof(Contact));
 	MEMCHK(mainList)
 	mainList[tm+1]=(Contact*)NULL;
 	Contact* tmp;
-	while(input !=8 )
+	while(input !=10 )
 	{
-		printf("Phone Book Application\n\t1) Add friend\n\t2) Delete friend\n\t3) Show phone book\n\t4) Find Contact\n\t5) Random Contact\n\t6) Delete All Contacts\n\t7) Sort\n\t8) Leave\n\nWhat do you want to do: ");
+		printf("Phone Book Application\n\t1) Add friend\n\t2) Delete friend\n\t3) Show phone book\n\t4) Find Contact\n\t5) Random Contact\n\t6) Delete All Contacts\n\t7) Sort\n\t8) Write to File\n\t9) Read from File\n\t10) Leave\n\nWhat do you want to do: ");
 		scanf("%d",&input);
 		int n;
 		switch(input){
@@ -191,6 +196,8 @@ int main(){
 					if(tolower(c[0])=='y'){
 						printf("Okay, In 3 seconds, you will no longer be able to contact all your friends....\n");
 						delay(3000);
+						for(n=tm; n<=0; n--)
+							free(mainList[n]);
 						free(mainList);
 						mainList=calloc(1, sizeof(Contact));
 						tm=0, ndeleted=0;
@@ -223,6 +230,48 @@ int main(){
 					}
 				}
 				printf("done\n");
+				break;
+			case 8:
+				
+				printf("Please enter the name of the file");
+				scanf("%s", filename);
+				FILE* contactFile=fopen(filename,"w");
+				if(contactFile != NULL ){
+					for(n=0; n <tm; n++){
+					
+						if(mainList[n]!= NULL){
+							fprintData(contactFile, mainList[n]);
+						}
+					}
+					printf("Content written to file %s\n", fname);
+					fclose(contactFile);
+				}	
+				else
+					printf("ERROR Cannot open file\n");
+				break;
+			case 9:
+				printf("Please enter the name of the file: ");
+				scanf("%s", &filename);
+				contactFile=fopen(filename,"r");
+				if(contactFile != NULL )
+				{
+					while(!feof(contactFile))
+					{	
+						if(fscanf(contactFile,"%s %s %s", &lname, &phone, &fname)>2){
+							printf("tm is %d and sizeof(Contact) is %d\n", tm, sizeof(Contact*));
+							realloc(mainList, (tm)*sizeof(Contact*));
+							MEMCHK(mainList)
+							*(tm+mainList) = createContact(fname, lname, phone);
+							tm++;
+						}
+					}
+					printf("tm is %d\n", tm);
+					printf("Content read from file %s\n", filename);
+					fclose(contactFile);
+				}	
+				else
+					printf("ERROR Cannot open file\n");
+				break;
 				
 		}
 	}
