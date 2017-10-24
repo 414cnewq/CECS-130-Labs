@@ -243,7 +243,7 @@ int main(){
 							fprintData(contactFile, mainList[n]);
 						}
 					}
-					printf("Content written to file %s\n", fname);
+					printf("Content written to file %s\n", filename);
 					fclose(contactFile);
 				}	
 				else
@@ -258,23 +258,24 @@ int main(){
 					while(!feof(contactFile))
 					{	
 						if(fscanf(contactFile,"%s %s %s", &lname, &phone, &fname)>2){
-							printf("tm is %d and sizeof(Contact) is %d\n", tm, sizeof(Contact*));
-							realloc(mainList, (tm)*sizeof(Contact*));
+							realloc(mainList, (++tm)*sizeof(Contact*));
 							MEMCHK(mainList)
-							*(tm+mainList) = createContact(fname, lname, phone);
-							tm++;
+							*(mainList+tm-1) = createContact(fname, lname, phone);
 						}
 					}
-					printf("tm is %d\n", tm);
 					printf("Content read from file %s\n", filename);
 					fclose(contactFile);
 				}	
 				else
 					printf("ERROR Cannot open file\n");
 				break;
+			
 				
 		}
 	}
+	int n;
+	for(n=tm; n<=0; n--)
+		free(mainList[n]);
 	free(mainList);
 	printf("Goodbye!\n");
 	system("pause");
