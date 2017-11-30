@@ -4,8 +4,8 @@
 #include <ctime>
 
 //Undefine user for AI v AI action
-#define USER 1
-#undef DEBUG
+#undef USER 
+#define DEBUG
 #undef DEBUG3
 
 
