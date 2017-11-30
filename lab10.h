@@ -1,13 +1,16 @@
 #ifndef LAB10_H
 #define LAB10_H
 
-class Board {
+namespace GetItAllTogether
+{
+
+class ChrisBoard {
 	bool tie;
 		char Array[3][3];
 		
 	public:
 		int lastX, lastY; //New for Lab 10
-		Board();       				// set the board to empty
+		ChrisBoard();       				// set the board to empty
 		char CheckForWin(); 		// see if a win has occured on this board
 		bool isTie();
 		char get(int, int); 		// get char from position
@@ -18,14 +21,15 @@ class Board {
 		void ResetBoard();			// Set the board to default configuration
 };
 
-class Board3D: public Board{
+class ChrisBoard3D: public ChrisBoard{
+	protected:
 	char Arrays[3][3][3];
 	int which;
 	bool h,v,d; //horiziontal, vertical or diagonal
 	int lastZ;
 	public:
 		bool tie;
-		Board3D();
+		ChrisBoard3D();
 		void ChangeBoard();
 		void MoveToPlay(int,bool,bool,bool);
 		void MoveToStored(int,bool,bool,bool);
@@ -35,4 +39,5 @@ class Board3D: public Board{
 		void User(char,char);
 		void ResetBoard3d();
 };
+}
 #endif

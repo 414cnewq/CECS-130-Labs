@@ -2,10 +2,11 @@
 #include "lab10.h"
 #include <cstdlib>
 #include <ctime>
+#include "FinalProject.h"
 
 //Undefine user for AI v AI action
 #undef USER 
-#define DEBUG
+#undef DEBUG
 #undef DEBUG3
 
 
@@ -20,8 +21,9 @@ Wierd Convention: x then y; x determines row, y determines columns
 
 
 using namespace std;
-
-char Board::CheckForWin()
+namespace GetItAllTogether
+{
+char ChrisBoard::CheckForWin()
 {
 	if( Array[0][0] == Array[0][1] && Array[0][2] == Array[0][0] ||  //Top row
 		Array[0][0] == Array[1][0] && Array[1][0] == Array[2][0] ||  //Right Column
@@ -42,7 +44,7 @@ char Board::CheckForWin()
 		
 }
 
-int Board::PlayAI(char play, char other)
+int ChrisBoard::PlayAI(char play, char other)
 {
 	if(CheckForWin() == other || CheckForWin() == play){
 			//cout << "Game Over, " << CheckForWin() << " Wins!"<< endl;
@@ -101,7 +103,7 @@ int Board::PlayAI(char play, char other)
 	}	
 }
 
-void Board::PlayUser(char play, char opp)
+void ChrisBoard::PlayUser(char play, char opp)
 {
 	int loc, tries=0;
 	while(tries < 10)
@@ -119,17 +121,17 @@ void Board::PlayUser(char play, char opp)
 		PlayAI(play, opp);
 	}
 }
-Board::Board()
+ChrisBoard::ChrisBoard()
 {
 	ResetBoard();
 	tie = false;
 }
-char Board::get(int x , int y)
+char ChrisBoard::get(int x , int y)
 {
 	return Array[x][y];
 }
 
-void Board::ResetBoard()
+void ChrisBoard::ResetBoard()
 {
 	Array[0][0]= '1'; Array[0][1] = '2'; Array[0][2] = '3';
 	Array[1][0]= '4'; Array[1][1] = '5'; Array[1][2] = '6';
@@ -138,7 +140,7 @@ void Board::ResetBoard()
 }
 
 
-bool Board::isTie()
+bool ChrisBoard::isTie()
 {
 	bool loopBroken; 
 	for(int x=0; x<3; x++)
@@ -159,7 +161,7 @@ bool Board::isTie()
 	return !loopBroken;
 }
 
-bool Board::set(char p, int x, int y)
+bool ChrisBoard::set(char p, int x, int y)
 {
 	char c = (3*x+y)+'1';
 	if ( p != NULL &&  Array[x][y] == c){
@@ -171,7 +173,7 @@ bool Board::set(char p, int x, int y)
 	}
 }
 
-void Board::PrintBoard()
+void ChrisBoard::PrintBoard()
 {
 	cout << " _____________"<< endl << endl;
 	cout << " | "<< Array[0][0] << " | " << Array[0][1] << " | " << Array[0][2] <<" |" << endl ;
@@ -182,12 +184,14 @@ void Board::PrintBoard()
 	cout << ' '<< "~~~~~~~~~~~~~"<< endl;
 }
 
-void Board3D::MoveToStored(int no, bool horiz=false, bool vert =false, bool diag=false)
+void ChrisBoard3D::MoveToStored(int no, bool horiz=false, bool vert =false, bool diag=false)
 {
 	no --;
 	if(horiz)
 	{
+		#ifdef DEBUG
 		cout << "Move to Stored Horizontal" << endl;
+		#endif
 		for(int x=0;x<3;x++)
 				for(int y=0; y<3;y++)
 				{	
@@ -196,7 +200,9 @@ void Board3D::MoveToStored(int no, bool horiz=false, bool vert =false, bool diag
 	}
 	else if (vert)
 	{
+		#ifdef DEBUG
 		cout << "Move to Stored Vertical" << endl;
+		#endif
 		for(int table=0;table<3;table++)
 				for(int y=0; y<3;y++)
 				{	
@@ -217,7 +223,7 @@ void Board3D::MoveToStored(int no, bool horiz=false, bool vert =false, bool diag
 }
 
 //Copy into 3d array
-void Board3D::MoveToPlay(int no, bool horiz=false, bool vert =false, bool diag=false)
+void ChrisBoard3D::MoveToPlay(int no, bool horiz=false, bool vert =false, bool diag=false)
 {
 	no --;
 	if(horiz)
@@ -258,7 +264,7 @@ void Board3D::MoveToPlay(int no, bool horiz=false, bool vert =false, bool diag=f
 			}
 		}
 }
-void  Board3D::ShowAll(){
+void  ChrisBoard3D::ShowAll(){
 	cout << endl;
 	for(int no=0; no< 3; no++ )
 	{
@@ -272,12 +278,12 @@ void  Board3D::ShowAll(){
 		cout<<"\b "<<endl<<endl;
 	}
 }
-Board3D::Board3D(){
+ChrisBoard3D::ChrisBoard3D(){
 	ResetBoard3d();
 	lastZ=1;
 }
 
-void Board3D::ResetBoard3d()
+void ChrisBoard3D::ResetBoard3d()
 {
 	for(int i = 1; i<4; i++)
 	{
@@ -288,11 +294,13 @@ void Board3D::ResetBoard3d()
 }
 
 
-void Board3D::ChangeBoard()
+void ChrisBoard3D::ChangeBoard()
 {
 	int newboard = rand()%3+1;
 	ResetBoard();
+	#ifdef DEBUG
 	cout << newboard << "is the new board" << endl;
+	#endif
 	MoveToPlay(newboard, true, false ,false);
 	lastZ=newboard-1;
 }
@@ -302,14 +310,14 @@ void Board3D::ChangeBoard()
 
 
 
-char Board3D::Check3d()
+char ChrisBoard3D::Check3d()
 {
 	for(int i=1;i<3; i++)
 	{
 		ResetBoard();
 		MoveToPlay(i, true, false, false);
 		char c = CheckForWin();
-		if(c=='X' || c == 'O')
+		if(c=='L' || c == 'C')
 			return c;
 	}
 	for(int i=1;i<3; i++)
@@ -317,7 +325,7 @@ char Board3D::Check3d()
 		ResetBoard();
 		MoveToPlay(i, false, true, false);
 		char c = CheckForWin();
-		if(c=='X' || c == 'O')
+		if(c=='L' || c == 'C')
 			return c;
 	}
 	for(int i=1;i<3; i++)
@@ -325,7 +333,7 @@ char Board3D::Check3d()
 		ResetBoard();
 		MoveToPlay(i, false, false, true);
 		char c = CheckForWin();
-		if(c=='X' || c == 'O')
+		if(c=='L' || c == 'C')
 			return c;
 	}
 	return NULL;
@@ -333,7 +341,7 @@ char Board3D::Check3d()
 
 
 
-char Board3D::AI(char ai, char player, int i=0)
+char ChrisBoard3D::AI(char ai, char player, int i=0)
 {
 	cout << "AI picking board" << endl;
 	ChangeBoard();
@@ -346,7 +354,7 @@ char Board3D::AI(char ai, char player, int i=0)
 	return CheckForWin();
 }
 
-void Board3D::User(char you, char opp)
+void ChrisBoard3D::User(char you, char opp)
 {
 	int brd;
 	ResetBoard();
@@ -363,63 +371,87 @@ void Board3D::User(char you, char opp)
 	MoveToStored(brd, true, false, false);
 }
 
-int main(){
-	Board3D game;
-	srand(time(0));
-	game.ResetBoard(); 
-	cout << "Instructions: "<<endl<<"Enter the number of the cell you wish to put X in. Board is as follows"<<endl;
-	game.ShowAll();
-	cout <<endl <<endl;
-	system("pause");
-	cout <<"Deciding who is going first... "<<endl;
-	bool first = rand()%2;
-	#ifdef DEBUG3
-	first = 1;
-	#endif
-	if(first)
-	  cout << "YOU are" << endl;
-	else
-		cout << "AI is going first" << endl;
-	int round = 0;
-	
-	do
+char Competition::PlayIt(bool LancePlayed)
+{
+	int i,j,k;
+	char Win = 0xAF;
+	while(true)
 	{
-		if(first || round > 0)
-		{
-			cout << "Player: X" << endl;
-			#ifdef USER
-			if(first)
-				#ifndef DEBUG3
-				game.ShowAll();
-				#endif
-				game.User('X', 'O');
-				
-			#endif
-			#ifndef USER
-			game.AI('X', 'O');
-			#endif
-		}
-		if(game.Check3d() == 'X')
-			break;
-		cout << "Player: O" << endl;
-		game.AI('O','X');
-		round++;
-		#ifndef DEBUG3
-		game.ShowAll();
-		#endif
-		if(game.Check3d() == 'O')
-			break;
-	}while(true );
-	char winner= game.Check3d();
-	if(game.isTie() && winner== NULL)
-		cout << "Game is tied" << endl;
-	else if( winner == 'X')
+	if(LancePlayed)
 	{
-		cout << "Game Over! You Win!" << endl;
-	}else{
-		cout << "Game Over! "<< winner << " AI Wins! It will now take over your computer" << endl;
+	cout << "CHRIS" << endl;
+	this->ChrisBoard3D::AI('C','L');
+	this->ChrisBoard3D::ShowAll();
+	Win = this->ChrisBoard3D::CheckForWin();
+	if(Win == 'C')
+		goto Finale;
+	bool Win = this->ChrisBoard3D::Check3d();
+	for(i=0; i<3; i++)
+		for(j=0;j<3;j++)
+			for(k=0; k<3;k++)
+				Bard[i][j][k] = this->ChrisBoard3D::Arrays[i][j][k];
+	for(i=0; i<3; i++)
+		for(j=0;j<3;j++)
+			for(k=0; k<3;k++)
+				this->Board3DLance::Arrays[i][j][k] = Bard[i][j][k];
 	}
-	game.ShowAll();
+	cout << "LANCE" << endl;
+	this->Board3DLance::AI('L','C', 0);
+	this->Board3DLance::ShowAll();
+	for(i=0; i<3; i++)
+		for(j=0;j<3;j++)
+			for(k=0; k<3;k++)
+				Bard[i][j][k] = this->Board3DLance::Arrays[i][j][k];
+	LancePlayed = true;
+	for(i=0; i<3; i++)
+		for(j=0;j<3;j++)
+			for(k=0; k<3;k++)
+				this->ChrisBoard3D::Arrays[i][j][k] = Bard[i][j][k];
+
+	Win = this->ChrisBoard3D::CheckForWin();
+	if(Win == 'L')
+		goto Finale;
+	}
+	Finale:
+		
+		string winner;
+		if(Win == 'L')
+			winner = "Lance";
+		else
+			winner = "ABozo";
+		cout << winner <<" Won!!!" << endl;
+		return Win;		
+}
+}
+
+int main(){
+	using namespace GetItAllTogether;
+	Competition game;
+	srand(time(0));
+	int lanceW=0, chrisW=0;
+	char winner;
+	int i, cf=0;
+	system("color 12");
+	for( i =0; i<10; i++)
+	{
+			bool ChrisFirst = rand()%2;
+			game = Competition(	);
+			#ifdef DEBUG
+			if(ChrisFirst) cf++;
+			#endif
+			winner = game.PlayIt(ChrisFirst);	
+			lanceW += (winner == 'L')? 1:0;
+			chrisW += (winner == 'C')? 1:0;
+			if(lanceW > 5 || chrisW > 5 )
+				break;
+	}
+	cout << "After "<< ++i<< " Rounds, Lance Wins " << lanceW<<" and Chris went First "<< cf<<" Times and Wins " << chrisW << endl;
+	if(lanceW > 5)
+		cout << "Lance is YOUR CHAMPION!!! " << (char)(236)<< endl;
+	else if (chrisW >5)
+		cout << "Chris is YOUR CHAMPION!!! " << (char)(236) << endl;
+	else
+		cout << "Whelp, I guess your AI's were evenly Matched"<<endl;
 	system("pause");
 	return 0;
 }
