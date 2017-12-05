@@ -51,19 +51,9 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit2]
-FileName=FinalProject.dev
+FileName=CECS130Lab10Newquist.cpp
 CompileCpp=1
 Folder=FinalProject
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit1]
-FileName=LanceLab10.cpp
-CompileCpp=1
-Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -71,11 +61,20 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=CECS130Lab10Newquist.cpp
+FileName=CECS130Lab10Hall.cpp
 CompileCpp=1
 Folder=FinalProject
 Compile=1
 Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit1]
+FileName=FinalProject.dev
+Folder=FinalProject
+Compile=0
+Link=0
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=

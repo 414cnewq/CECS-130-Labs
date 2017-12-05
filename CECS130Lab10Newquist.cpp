@@ -397,7 +397,10 @@ char Competition::PlayIt(bool LancePlayed)
 	}
 	cout << "LANCE" << endl;
 	this->Board3DLance::AI('L','C', 0);
-	this->Board3DLance::ShowAll();
+	this->Board3DLance::print3();
+	#ifdef DEBUG
+	system("pause");
+	#endif
 	for(i=0; i<3; i++)
 		for(j=0;j<3;j++)
 			for(k=0; k<3;k++)
@@ -431,21 +434,20 @@ int main(){
 	int lanceW=0, chrisW=0;
 	char winner;
 	int i, cf=0;
-	system("color 12");
+	//system("color 12");
 	for( i =0; i<10; i++)
 	{
 			bool ChrisFirst = rand()%2;
 			game = Competition(	);
-			#ifdef DEBUG
 			if(ChrisFirst) cf++;
-			#endif
 			winner = game.PlayIt(ChrisFirst);	
 			lanceW += (winner == 'L')? 1:0;
 			chrisW += (winner == 'C')? 1:0;
 			if(lanceW > 5 || chrisW > 5 )
 				break;
 	}
-	cout << "After "<< ++i<< " Rounds, Lance Wins " << lanceW<<" and Chris went First "<< cf<<" Times and Wins " << chrisW << endl;
+	if(i != 10) i++;
+	cout << "After "<< i<< " Rounds, Lance Wins " << lanceW<<" and Chris Wins " << chrisW << endl;
 	if(lanceW > 5)
 		cout << "Lance is YOUR CHAMPION!!! " << (char)(236)<< endl;
 	else if (chrisW >5)

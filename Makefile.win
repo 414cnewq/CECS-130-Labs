@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = LanceLab10.o CECS130Lab10Newquist.o
-LINKOBJ  = LanceLab10.o CECS130Lab10Newquist.o
+OBJ      = CECS130Lab10Newquist.o CECS130Lab10Hall.o
+LINKOBJ  = CECS130Lab10Newquist.o CECS130Lab10Hall.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
@@ -25,8 +25,8 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-LanceLab10.o: LanceLab10.cpp
-	$(CPP) -c LanceLab10.cpp -o LanceLab10.o $(CXXFLAGS)
-
 CECS130Lab10Newquist.o: CECS130Lab10Newquist.cpp
 	$(CPP) -c CECS130Lab10Newquist.cpp -o CECS130Lab10Newquist.o $(CXXFLAGS)
+
+CECS130Lab10Hall.o: CECS130Lab10Hall.cpp
+	$(CPP) -c CECS130Lab10Hall.cpp -o CECS130Lab10Hall.o $(CXXFLAGS)
